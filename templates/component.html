@@ -1,0 +1,25 @@
+{% macro card(video) -%}
+
+  <div class="card">
+    
+    <div class='thumbnailContainer'>
+      <img class='thumbnail' src="{{video['thumbnails'][0]['url']}}"/>
+    </div>
+  
+    <div class='infoContaienr'>
+      <div class='channelLogoContainer'>
+        <img 
+          class="channelLogo"      
+          alt="channel"
+          src="https://www.filepicker.io/api/file/q8yh1SmySmy5BNapeDem"
+          />
+        <a href="https://www.youtube.com/watch?v={{video['videoId']}}">
+          <div class='info'>
+            <span>Clever Programmer</span></br>          
+          </div>
+        </a>
+      </div>  
+    
+    </div>
+  </div>
+  {%- endmacro %}

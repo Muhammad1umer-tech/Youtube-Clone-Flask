@@ -1,16 +1,6 @@
-{% from 'components.html' import card %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <link rel="stylesheet" href="./static/styles.css" />
-    
-    <title>YouTube App</title>
-  </head>
-  <body>
-    <div id='home'>
-    {% for video in videos %}
-      {{ card(video) }}
-    {% endfor %}
-    </div>
-  </body>
-</html>
+{% from 'component.html' import card %}
+<link rel='stylesheet' href="./static/styles.css"/>
+
+{% for video in videos %}
+  {{card(video)}}
+{% endfor %}

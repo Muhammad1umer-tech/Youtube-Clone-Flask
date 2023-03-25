@@ -1,42 +1,52 @@
-from flask import Flask, jsonify, render_template
-from numerize.numerize import numerize
+from flask import Flask, render_template
 import requests
-import pprint
-
-# https://www.youtube.com/watch?v=LP6mRPBg_4I
-
-pp = pprint.PrettyPrinter(indent=2)
 
 app = Flask(__name__)
+
+CHANNELS = {
+  'qazi': 'UCqrILQNl5Ed9Dz6CGMyvMTQ',
+  'mrbeast': 'UCX6OQ3DkcsbYNE6H8uQQuVA',
+  'mkbhd': 'UCBJycsmduvYEL83R_U4JriQ',
+  'pm': 'UC3DkFux8Iv-aYnTRWzwaiBA',
+}
+
+data = {
+        'content': [
+          {
+            'type': 'video', 
+            'video': {
+                    'thumbnails': [
+                    {
+                      'url': 'blah'
+                    }
+                    ],
+                    'title': 'Build Titter Web3 Clone with React Native!',
+                    'isliveNow': False, 
+                   },
+          },
+        ],
+        'cursorNext': 'blah'
+       }
+# print(data['content'][0]['video']['title'])
+
+
 
 @app.route('/')
 def index():
   url = "https://youtube138.p.rapidapi.com/channel/videos/"
-  querystring = {"id":"UCqrILQNl5Ed9Dz6CGMyvMTQ", 
-                 "filter":"uploads_latest", 
-                 "hl":"en", "gl":"US"}
+
+  querystring = {"id":CHANNELS['qazi'],"hl":"en","gl":"US"}
+
   headers = {
-  	"X-RapidAPI-Key": "d72c98894cmsh28b3af34c5863e1p19f360jsne4b9c3aa39ec",
-  	"X-RapidAPI-Host": "youtube138.p.rapidapi.com"
+	 "X-RapidAPI-Key": "16d3a267c2mshf26389efcb7ee35p1a5c11jsn35300d49cd7b",
+	 "X-RapidAPI-Host": "youtube138.p.rapidapi.com"
   }
-  
-  response = requests.get(url, headers=headers, params=querystring)
+  response = requests.request("GET", url, headers=headers, params=querystring)
   data = response.json()
-  contents = data['contents']
+  contents = data['contents'];
+  video = [con['video'] for con in contents if con['video']['publishedTimeText']]
+  print(video)
   
-  videos = [video['video'] for video in contents if video['video']['publishedTimeText']]
-  
-  print(videos[0])
-  
-  return render_template('index.html', 
-                        videos=videos)
-
-@app.template_filter()
-def numberize(views):
-  return numerize(views, 1)
-
-@app.template_filter()
-def highest_quality_image(images):
-  return images[3]['url'] if len(images) >= 4 else images[0]['url']
+  return render_template('index.html', videos = video)
   
 app.run(host='0.0.0.0', port=81)
